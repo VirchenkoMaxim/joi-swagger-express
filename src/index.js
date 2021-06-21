@@ -1,3 +1,4 @@
+// @ts-check
 const express = require('express');
 const merge = require('lodash.merge');
 const validateSchema = require('./validateSchema');
@@ -11,6 +12,7 @@ const swaggerUi = require('swagger-ui-express');
  */
 class ExpressJoiSwagger {
   /**
+   * @param {Object} options
    * @param {Object} options.swaggerDefinition
    * @param {Object} options.onValidateError
    * @param {Object} options.joiOpts
@@ -20,10 +22,10 @@ class ExpressJoiSwagger {
     swaggerDefinition,
     onValidateError,
     joiOpts,
-    swaggerRoutePath
+    swaggerRoutePath,
   }) {
     this.swaggerDefinition = Object.assign({}, swaggerDefinition, {
-      paths: {}
+      paths: {},
     });
 
     this.onValidateError = onValidateError;
@@ -51,7 +53,7 @@ class ExpressJoiSwagger {
         { key: 'put' },
         { key: 'delete' },
         { key: 'options' },
-        { key: 'patch' }
+        { key: 'patch' },
       ].reduce(
         (obj, { key, method }) => ({
           ...obj,
@@ -59,11 +61,11 @@ class ExpressJoiSwagger {
             this,
             { method: method || key, namespace, tags },
             expressRouter,
-          )
+          ),
         }),
         {},
       ),
-      listen: this._listen.bind(this, expressRouter)
+      listen: this._listen.bind(this, expressRouter),
     });
   }
 
@@ -73,7 +75,7 @@ class ExpressJoiSwagger {
    */
   assignDefinition(assignedSwaggerDefinition) {
     this.swaggerDefinition = merge(this.swaggerDefinition, {
-      definitions: assignedSwaggerDefinition
+      definitions: assignedSwaggerDefinition,
     });
   }
 
@@ -81,9 +83,8 @@ class ExpressJoiSwagger {
    * Wrapper method around express router handlers
    * This method will execute Joi validation against the route handler's validation schema,
    * Then build a swagger definition for the route
-   * @param  {{ method: string, namespace: string }} properties
+   * @param  {{ method: string, namespace: string, tags: string }} properties
    * @param  {Object} expressRouter
-   * @param  {Object} swaggerDefinition
    * @param  {...*}   args
    * @return {void}
    */

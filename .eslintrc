@@ -7,10 +7,10 @@
   "parserOptions": {
     "ecmaVersion": 9
   },
+
   "rules": {
     "linebreak-style": 0,
     "no-undef": 2,
-    "comma-dangle": [2, "never"],
     "max-len": [
       2,
       {

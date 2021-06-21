@@ -2,11 +2,13 @@
   "name": "joi-swagger-express",
   "version": "0.0.1",
   "description": "Simple non-intrusive library for validating Express routes with Joi and auto-generating Swagger documentation.",
-  "main": "./src/index.js",
+  "main": "src/index.js",
+	"typings": "src/index.d.ts",
   "repository": "git@github.com:richardgirges/express-joi-swagger.git",
   "license": "MIT",
   "scripts": {
     "lint": "eslint ./",
+    "build:types": "tsc -allowJs ./src/index.js -d",
     "format": "eslint --fix ./",
     "create-release": "release-it --src.tag",
     "test": "jest --forceExit"
@@ -25,6 +27,7 @@
     "eslint-config-google": "^0.9.1",
     "jest": "^27.0.4",
     "release-it": "^14.9.0",
-    "supertest": "^3.3.0"
+    "supertest": "^3.3.0",
+    "typescript": "^4.3.4"
   }
 }

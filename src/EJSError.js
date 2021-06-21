@@ -1,3 +1,4 @@
+// @ts-check
 /**
  * ExpressJoiSwagger Error class. Extends from the base Error class.
  * This class is used to identify exclusive errors for this library.

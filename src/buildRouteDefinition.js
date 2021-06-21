@@ -115,7 +115,7 @@ function _buildParameters(validationSchema) {
     body: [],
     params: [],
     files: [],
-    headers: []
+    headers: [],
   };
 
   if (!validationSchema) {
@@ -124,15 +124,16 @@ function _buildParameters(validationSchema) {
 
   Object.keys(reqParams).forEach((reqKey) => {
     if (validationSchema[reqKey]) {
-      const { properties } = j2s(validationSchema[reqKey]).swagger;
+      const swaggerDef = j2s(validationSchema[reqKey]);
+      if (swaggerDef && swaggerDef.swagger && swaggerDef.swagger.properties) {
+        for (const k in swaggerDef.swagger.properties) {
+          const property = swaggerDef.swagger.properties[k];
 
-      for (const k in properties) {
-        const property = properties[k];
+          property.name = k;
+          property.in = reqKey;
 
-        property.name = k;
-        property.in = reqKey;
-
-        reqParams[reqKey].push(property);
+          reqParams[reqKey].push(property);
+        }
       }
     }
   });
@@ -164,7 +165,7 @@ function _buildResponses(
       if (typeof responses[i] === 'number' || !isNaN(responses[i])) {
         const httpCode = parseInt(responses[i]);
         responsesDefinition[httpCode] = {
-          description: HTTPStatus[httpCode]
+          description: HTTPStatus[httpCode],
         };
       } else {
         throw new EJSError(
@@ -176,6 +177,7 @@ function _buildResponses(
     }
   } else {
     for (const k in responses) {
+      // @ts-ignore
       if (isNaN(k) || !responses[k] || typeof responses[k] !== 'object') {
         throw new EJSError(
           `Invalid response property: ${k}`,
@@ -188,7 +190,7 @@ function _buildResponses(
 
       if (!responses) {
         responsesDefinition[httpCode] = {
-          description: HTTPStatus[httpCode]
+          description: HTTPStatus[httpCode],
         };
       } else {
         if (responseStructures && responseStructures[httpCode]) {
